@@ -1,4 +1,4 @@
-import {DogEntity, SecDogEntity} from "../types";
+import {DogEntity, LittleDogInfoEntity, SecDogEntity} from "../types";
 import {ValErr} from "../utils/errors";
 import {pool} from "../utils/db";
 import {FieldPacket} from "mysql2";
@@ -8,7 +8,7 @@ type DogRecordResults = [DogEntity[], FieldPacket[]];
 export class DogRecord implements DogEntity {
     id: string;
     name: string;
-    description?: string;
+    description: string;
     city: string;
 
     constructor(obj: SecDogEntity) {
@@ -30,30 +30,37 @@ export class DogRecord implements DogEntity {
     }
 
     static async getOneDog(id: string): Promise<DogRecord> | null {
-        const [results] = await pool.execute("SELECT * FROM `dogs` WHERE id = :id", {
+        const [results] = await pool.execute("SELECT * FROM `dogs` WHERE `id` = :id", {
             id: id,
         }) as DogRecordResults;
 
         return results.length === 0? null : new DogRecord(results[0]);
     }
 
-    static async getAllDogs(): Promise<DogRecord[]> | null {
+    static async getAllDogs(): Promise<LittleDogInfoEntity[]> | null {
         const [results] = await pool.execute("SELECT * FROM `dogs`") as DogRecordResults;
 
-        return results.length === 0? null : results;
+        return results.length === 0? null : results.map(result => {
+            const {
+                id, name, city,
+            } = result;
+            return {
+                id, name, city,
+            };
+        });
     }
 
-    static async findAllCity(city: string): Promise<DogRecord[]> {
+    static async findAllDogsCity(city: string): Promise<LittleDogInfoEntity[]> | null {
         const [results] = await pool.execute("SELECT * FROM `dogs` WHERE `city` LIKE :search", {
             search: `%${city}%`,
         } ) as DogRecordResults;
 
-        return results.map(result => {
+        return results.length === 0? null : results.map(result => {
             const {
-                id, name, description, city,
+                id, name, city,
             } = result;
             return {
-                id, name, description, city,
+                id, name, city,
             };
         });
     }
