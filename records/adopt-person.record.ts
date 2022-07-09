@@ -1,5 +1,7 @@
 import {AdopterEntity} from "../types";
 import {ValidationError} from "../utils/errors";
+import {pool} from "../utils/db";
+import {v4 as uuid} from 'uuid';
 
 interface SecAdopterEntity extends Omit<AdopterEntity, 'id'> {
     id?: string;
@@ -24,8 +26,21 @@ export class AdopterRecord implements SecAdopterEntity {
             throw new ValidationError('Numer telefonu musi składać się z 9 cyfr!');
         }
 
+        this.id = obj.id;
         this.firstAndLastName = obj.firstAndLastName;
         this.email = obj.email;
         this.phone = obj.phone;
+
+
+    }
+
+    async addAdopter(): Promise<void> {
+        if (!this.id) {
+            this.id = uuid();
+        } else {
+            throw new Error('Taka osoba już istnieje.');
+        }
+
+        await pool.execute("INSERT INTO `adopters` (`id`, `firstAndLastName`, `email`, `phone`) VALUES(:id, :firstAndLastName, :email, :phone)", this)
     }
 }
