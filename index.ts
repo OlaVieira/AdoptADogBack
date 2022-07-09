@@ -14,7 +14,7 @@ app.use(json());
 
 //routers
 app.get('/', async (req, res) => {
-    throw new ValidationError('Oh no');
+    throw new ValidationError('O nie! :(');
 });
 
 app.use(handleErrors);
