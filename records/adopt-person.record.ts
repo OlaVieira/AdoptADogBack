@@ -1,17 +1,17 @@
-import {AdopterEntity} from "../types";
+import {AdopterEntity, SecAdopterEntity} from "../types";
 import {ValErr} from "../utils/errors";
 import {pool} from "../utils/db";
 import {v4 as uuid} from 'uuid';
+import {FieldPacket} from "mysql2";
 
-interface SecAdopterEntity extends Omit<AdopterEntity, 'id'> {
-    id?: string;
-}
 
-export class AdopterRecord implements SecAdopterEntity {
+type AdopterRecordResults = [AdopterEntity[], FieldPacket[]];
+
+export class AdopterRecord implements AdopterEntity {
     id: string;
     firstAndLastName: string;
     email: string;
-    phone: number;
+    phone: string;
 
     constructor(obj: SecAdopterEntity) {
 
@@ -21,7 +21,7 @@ export class AdopterRecord implements SecAdopterEntity {
         if (!obj.email || obj.email.length > 345 || obj.email.length < 4  || obj.email.includes("@")) {
             throw new ValErr('Email musi mięc więcej niż 4 znaki i mniej niż 345 znaków i musi zawierać "@".');
         }
-        if (!obj.phone || typeof obj.phone !== 'number' ) {
+        if (!obj.phone || obj.phone.length !== 9 ) {
             throw new ValErr('Numer telefonu musi składać się z 9 cyfr!');
         }
 
@@ -31,6 +31,14 @@ export class AdopterRecord implements SecAdopterEntity {
         this.phone = obj.phone;
 
 
+    }
+
+    static async getPerson(id: string): Promise<AdopterRecord> | null {
+        const [results] = await pool.execute("SELECT * FROM `adopters` WHERE `id` = :id", {
+            id: id,
+        }) as AdopterRecordResults;
+
+        return results.length === 0 ? null : new AdopterRecord(results[0]);
     }
 
     async addAdopter(): Promise<void> {
@@ -43,9 +51,7 @@ export class AdopterRecord implements SecAdopterEntity {
             );
         }
         //jesli nie ma id to robimy zapytanie i dodajemy do bazy danych adopters
-        await pool.execute(
-            "INSERT INTO `adopters` (`id`, `firstAndLastName`, `email`, `phone`) VALUES(:id, :firstAndLastName, :email, :phone)",
-            this)
+        await pool.execute("INSERT INTO `adopters` (`id`, `firstAndLastName`, `email`, `phone`) VALUES(:id, :firstAndLastName, :email, :phone)", this)
     }
 
 }

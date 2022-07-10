@@ -1,4 +1,4 @@
-import express, {json} from "express";
+import express, {json, Router} from "express";
 import cors from 'cors';
 import 'express-async-errors';
 import {handleErrors, ValErr} from "./utils/errors";
@@ -21,9 +21,11 @@ app.use(rateLimit({
 }))
 
 //routers
+const router = Router();
+router.use('/dogs', dogRouter);
+router.use('/adopt', adopterRouter);
+app.use('/api', router);
 
-app.use('/dogs', dogRouter);
-app.use('/adopter', adopterRouter);
 app.get('/', async (req, res) => {
     throw new ValErr('O nie! :(');
 });
