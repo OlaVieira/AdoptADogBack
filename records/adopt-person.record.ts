@@ -34,12 +34,18 @@ export class AdopterRecord implements SecAdopterEntity {
     }
 
     async addAdopter(): Promise<void> {
+        // spr czy id istnieje
         if (!this.id) {
             this.id = uuid();
         } else {
-            throw new Error('Taka osoba już istnieje.');
+            throw new Error(
+                'Taka osoba już istnieje.'
+            );
         }
-
-        await pool.execute("INSERT INTO `adopters` (`id`, `firstAndLastName`, `email`, `phone`) VALUES(:id, :firstAndLastName, :email, :phone)", this)
+        //jesli nie ma id to robimy zapytanie i dodajemy do bazy danych adopters
+        await pool.execute(
+            "INSERT INTO `adopters` (`id`, `firstAndLastName`, `email`, `phone`) VALUES(:id, :firstAndLastName, :email, :phone)",
+            this)
     }
+
 }
