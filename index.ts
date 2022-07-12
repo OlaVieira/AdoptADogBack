@@ -1,10 +1,11 @@
-import express, {json, Router} from "express";
+import express, {json} from "express";
 import cors from 'cors';
 import 'express-async-errors';
 import {handleErrors, ValErr} from "./utils/errors";
 import rateLimit from "express-rate-limit";
 import {dogRouter} from "./routers/dog.router";
 import {adopterRouter} from "./routers/adopter.router";
+
 
 const app = express();
 
@@ -13,7 +14,10 @@ app.use(cors(
         origin: 'http://localhost:3000',
     }
 ));
+
 app.use(json());
+// Content-type: application/json
+
 app.use(rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 100,
@@ -21,10 +25,10 @@ app.use(rateLimit({
 }))
 
 //routers
-const router = Router();
-router.use('/dogs', dogRouter);
-router.use('/adopt', adopterRouter);
-app.use('/api', router);
+app.use('/adopters', adopterRouter);
+app.use('/dogs', dogRouter);
+
+
 
 app.get('/', async (req, res) => {
     throw new ValErr('O nie! :(');

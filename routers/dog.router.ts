@@ -1,6 +1,8 @@
 import {Router} from 'express';
 import {DogRecord} from "../records/dog.record";
 
+//pobieramy jednego psa, wszystkie psy, i psy z miastem
+//@TODO dodac post - zeby stworzyc psa przy formularzu, dodac do bazy danych
 export const dogRouter = Router()
     .get('/', async (req, res) => {
         const dogsInfo = await DogRecord.getAllDogs();
