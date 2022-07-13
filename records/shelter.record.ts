@@ -53,7 +53,7 @@ export class ShelterRecord implements ShelterEntity {
     //moze zwracac null
     static async getOneShelter(id: string): Promise<ShelterRecord | null> {
         //wybieramy ze schronisk id
-        const [results] = await pool.execute("SELECT * FROM `adopters` WHERE `id` = :id", {
+        const [results] = await pool.execute("SELECT * FROM `shelters` WHERE `id` = :id", {
             id,
         }) as ShelterRecordResults;
 
