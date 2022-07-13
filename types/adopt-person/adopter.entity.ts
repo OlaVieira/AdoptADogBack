@@ -8,6 +8,7 @@ export interface LittleAdopterInfoEntity {
 export interface AdopterEntity extends LittleAdopterInfoEntity{
     phone: string;
     email: string;
+    wantedDogs: string;
 }
 
 export interface SecAdopterEntity extends Omit<AdopterEntity, 'id'> {

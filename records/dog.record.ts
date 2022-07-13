@@ -11,6 +11,8 @@ export class DogRecord implements DogEntity {
     name: string;
     description: string;
     city: string;
+    shelterId: string;
+    phone: string;
 
     constructor(obj: SecDogEntity) {
         //walidacja! jesli bedzie opcja dodawania psa przez formularz to się przyda i do bazy tez
@@ -24,10 +26,14 @@ export class DogRecord implements DogEntity {
         if (!obj.city || obj.city.length < 1 || obj.city.length > 50 ) {
             throw new ValErr('Miasto, w którym znajduje się pies, nie może mieć mniej niż 1 znak i więcej niż 50 znaków :)');
         }
+
+
         this.id = obj.id;
         this.name = obj.name;
         this.description = obj.description;
         this.city = obj.city;
+        this.shelterId = obj.shelterId;
+        this.phone = obj.phone;
 
     }
     //szukamy konkretnego pieseła, pamietaj ze moze byc null, chcemy wszystkie informacje razem z opisem
@@ -78,11 +84,12 @@ export class DogRecord implements DogEntity {
             throw new Error( 'Przykro nam. Taki pies już istnieje :(.');
         }
         //jesli nie ma id to robimy zapytanie i dodajemy do bazy danych adopters
-        await pool.execute("INSERT INTO `dogs` (`id`, `name`, `description`, `city`) VALUES(:id, :name, :description, :city)", {
+        await pool.execute("INSERT INTO `dogs` (`id`, `name`, `description`, `city`,`phone`) VALUES(:id, :name, :description, :city, :phone)", {
             id: this.id,
             name: this.name,
             description: this.description,
             city: this.city,
+            phone: this.phone,
         });
     }
 }

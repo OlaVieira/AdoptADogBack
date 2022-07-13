@@ -6,6 +6,8 @@ export interface LittleDogInfoEntity {
 
 export interface DogEntity extends LittleDogInfoEntity{
     description: string;
+    shelterId?: string;
+    phone?: string;
 }
 
 export interface SecDogEntity extends Omit<DogEntity, 'id'> {

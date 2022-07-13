@@ -12,6 +12,7 @@ export class AdopterRecord implements AdopterEntity {
     firstAndLastName: string;
     email: string;
     phone: string;
+    wantedDogs: string;
 
     constructor(obj: SecAdopterEntity) {
 
@@ -24,12 +25,15 @@ export class AdopterRecord implements AdopterEntity {
         if (!obj.phone || obj.phone.length > 9 || obj.phone.length < 9 ) {
             throw new ValErr('Numer telefonu musi składać się z 9 cyfr!');
         }
+        if (!obj.wantedDogs || obj.wantedDogs.length > 50 || obj.phone.length < 1 ) {
+            throw new ValErr('Musisz wpisać imię psa lub imiona psów, które chcesz adoptować');
+        }
 
         this.id = obj.id;
         this.firstAndLastName = obj.firstAndLastName;
         this.email = obj.email;
         this.phone = obj.phone;
-
+        this.wantedDogs = obj.wantedDogs;
 
     }
     //admin bedzie miał do wglądu, jeśli admin kiedyś powstanie w tej aplikacji ..
@@ -56,11 +60,12 @@ export class AdopterRecord implements AdopterEntity {
             throw new Error( 'Przykro nam. Taka osoba już istnieje :(.');
         }
         //jesli nie ma id to robimy zapytanie i dodajemy do bazy danych adopters
-        await pool.execute("INSERT INTO `adopters` (`id`, `firstAndLastName`, `email`, `phone`) VALUES(:id, :firstAndLastName, :email, :phone)", {
+        await pool.execute("INSERT INTO `adopters` (`id`, `firstAndLastName`, `email`, `phone`, `wantedDogs`) VALUES(:id, :firstAndLastName, :email, :phone, :wantedDogs)", {
             id: this.id,
             firstAndLastName: this.firstAndLastName,
             email: this.email,
             phone: this.phone,
+            wantedDogs: this.wantedDogs,
         });
     }
 
