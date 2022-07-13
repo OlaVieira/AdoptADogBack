@@ -2,6 +2,7 @@ import {DogEntity, LittleDogInfoEntity, SecDogEntity} from "../types";
 import {ValErr} from "../utils/errors";
 import {pool} from "../utils/db";
 import {FieldPacket} from "mysql2";
+import {v4 as uuid} from "uuid";
 
 type DogRecordResults = [DogEntity[], FieldPacket[]];
 
@@ -69,5 +70,19 @@ export class DogRecord implements DogEntity {
         });
     }
     //@TODO - stworzmy psa i dodajmy do bazy
-
+    async addDog(): Promise<void> {
+        // spr czy id istnieje
+        if (!this.id) {
+            this.id = uuid();
+        } else {
+            throw new Error( 'Przykro nam. Taki pies już istnieje :(.');
+        }
+        //jesli nie ma id to robimy zapytanie i dodajemy do bazy danych adopters
+        await pool.execute("INSERT INTO `dogs` (`id`, `name`, `description`, `city`) VALUES(:id, :name, :description, :city)", {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            city: this.city,
+        });
+    }
 }

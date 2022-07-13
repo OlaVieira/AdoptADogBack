@@ -16,3 +16,8 @@ export const dogRouter = Router()
         const dogsInfoCity = await DogRecord.findAllDogsCity(req.params.city ?? '');
         res.json(dogsInfoCity);
     })
+    .post('/add', async (req, res) => {
+        const dog = new DogRecord(req.body);
+        await dog.addDog()
+        res.json(dog);
+    })

@@ -5,6 +5,7 @@ import {handleErrors, ValErr} from "./utils/errors";
 import rateLimit from "express-rate-limit";
 import {dogRouter} from "./routers/dog.router";
 import {adopterRouter} from "./routers/adopter.router";
+import {shelterRouter} from "./routers/shelter.router";
 
 
 const app = express();
@@ -27,7 +28,7 @@ app.use(rateLimit({
 //routers
 app.use('/adopters', adopterRouter);
 app.use('/dogs', dogRouter);
-
+app.use('/shelters', shelterRouter);
 
 
 app.get('/', async (req, res) => {

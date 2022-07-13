@@ -10,7 +10,7 @@ export const adopterRouter = Router()
         const adopter = await AdopterRecord.getOneAdopter(req.params.id);
         res.json(adopter);
     })
-    .post('/add/:id', async (req, res) => {
+    .post('/add', async (req, res) => {
         const adopter = new AdopterRecord(req.body);
         await adopter.addAdopter()
         res.json(adopter);
