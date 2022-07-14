@@ -63,16 +63,16 @@ export class DogRecord implements DogEntity {
     //potrzebne przy wyszukiwarce
     //szukamy wszystkich psów ktore maja konkretne miasto
     //pamietaj-moze byc null
-    static async findAllDogsCity(city: string): Promise<LittleDogInfoEntity[]> | null {
+    static async findAllDogsCity(city: string): Promise<LittleDogInfoEntity[]> {
         //w bazie danych szukamy te psy ktore maja miasto jak to(like) przy wyszukiwaniu
-        const [results] = await pool.execute("SELECT * FROM `dogs` WHERE `city` LIKE :search", {
-            search: `%${city}%`,
+        const [results] = await pool.execute("SELECT * FROM `dogs` WHERE `city` LIKE :searchCity", {
+            searchCity: `%${city}%`,
         } ) as DogRecordResults;
 
         //jesli nie ma dajemy null, jesli są to mapujemy i wysylamy tylko id, imie psa i miasto, bez opisu
-        return results.length === 0? null : results.map(result => {
-            const {id, name, city} = result;
-            return {id, name, city};
+        return results.map(result => {
+            const {id, name, city,} = result;
+            return {id, name, city,};
         });
     }
     //@TODO - stworzmy psa i dodajmy do bazy
