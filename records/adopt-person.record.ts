@@ -11,7 +11,7 @@ export class AdopterRecord implements AdopterEntity {
     id: string;
     firstAndLastName: string;
     email: string;
-    phone: string;
+    phone: number;
     wantedDogs: string;
 
     constructor(obj: SecAdopterEntity) {
@@ -22,10 +22,8 @@ export class AdopterRecord implements AdopterEntity {
         if (!obj.email || obj.email.length > 345 || obj.email.length < 4  || !obj.email.includes("@")) {
             throw new ValErr('Email musi mięc więcej niż 4 znaki i mniej niż 345 znaków i musi zawierać "@".');
         }
-        if (!obj.phone || obj.phone.length > 9 || obj.phone.length < 9 ) {
-            throw new ValErr('Numer telefonu musi składać się z 9 cyfr!');
-        }
-        if (!obj.wantedDogs || obj.wantedDogs.length > 50 || obj.phone.length < 1 ) {
+       //@TODO -poprawić walidację telefonu - typeof obj.phone!== "number"
+        if (!obj.wantedDogs || obj.wantedDogs.length > 50 || obj.wantedDogs.length < 1 ) {
             throw new ValErr('Musisz wpisać imię psa lub imiona psów, które chcesz adoptować');
         }
 

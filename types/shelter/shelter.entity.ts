@@ -6,7 +6,7 @@ export interface LittleShelterInfoEntity {
 
 //gdy chcemy wyswietlic tylko jedno schronisko, info szczegółowe o nim
 export interface ShelterEntity extends LittleShelterInfoEntity{
-    phone: string;
+    phone: number;
     email: string;
     address: string;
 }

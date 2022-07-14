@@ -10,7 +10,7 @@ export class ShelterRecord implements ShelterEntity {
     id: string;
     name: string;
     email: string;
-    phone: string;
+    phone: number;
     address: string;
 
     constructor(obj: SecShelterEntity) {
@@ -21,9 +21,9 @@ export class ShelterRecord implements ShelterEntity {
         if (!obj.email || obj.email.length > 345 || obj.email.length < 4  || !obj.email.includes("@")) {
             throw new ValErr('Email musi mięc więcej niż 4 znaki i mniej niż 345 znaków i musi zawierać "@".');
         }
-        if (!obj.phone || obj.phone.length > 9 || obj.phone.length < 9 ) {
-            throw new ValErr('Numer telefonu musi składać się z 9 cyfr!');
-        }
+        // if (!obj.phone || typeof obj.phone !== 'number') {
+        //     throw new ValErr('Numer telefonu musi składać się z 9 cyfr!');
+        // }
         if (!obj.address || obj.address.length > 200 || obj.address.length < 10 ) {
             throw new ValErr('Adres schroniska musi składać się z miasta, kodu, ulicy i numeru. Nie może przekraczać 200 znaków.');
         }

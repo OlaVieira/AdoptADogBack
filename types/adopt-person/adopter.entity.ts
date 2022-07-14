@@ -6,7 +6,7 @@ export interface LittleAdopterInfoEntity {
 
 //dy chcemy jednego adoptera i jego informacje jaki ma email i tel
 export interface AdopterEntity extends LittleAdopterInfoEntity{
-    phone: string;
+    phone: number;
     email: string;
     wantedDogs: string;
 }

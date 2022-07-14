@@ -12,7 +12,7 @@ export class DogRecord implements DogEntity {
     description: string;
     city: string;
     shelterId: string;
-    phone: string;
+    phone: number;
 
     constructor(obj: SecDogEntity) {
         //walidacja! jesli bedzie opcja dodawania psa przez formularz to się przyda i do bazy tez
